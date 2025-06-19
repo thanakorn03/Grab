@@ -4,7 +4,7 @@ const Card = (props) => {
   return (
     <div className="card bg-base-100 w-96 shadow-sm">
       <figure>
-        <img src={props.img} alt="Shoes" />
+        <img src={props.img} alt="ร้านอาหาร" />
       </figure>
       <div className="card-body">
         <h2 className="card-title">
@@ -13,8 +13,8 @@ const Card = (props) => {
         </h2>
         <p>{props.type}</p>
         <div className="card-actions justify-end">
-          <div className="badge badge-outline">Delete</div>
-          <div className="badge badge-outline">Edit</div>
+          <button className="badge badge-outline text-red-500">Delete</button>
+          <button className="badge badge-outline text-green-500">Edit</button>
         </div>
       </div>
     </div>

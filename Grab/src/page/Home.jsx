@@ -8,18 +8,26 @@ const Home = () => {
   const [filterType, setFilterType] = useState("ทั้งหมด");
   const [loading, setLoading] = useState(true);
 
+  const fetchRestaurants = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/restaurants");
+      const data = await response.json();
+      setRestaurants(data);
+      setLoading(false);
+    } catch (error) {
+      console.error("โหลดข้อมูลไม่สำเร็จ:", error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    fetch("http://localhost:3001/restaurants")
-      .then((res) => res.json())
-      .then((data) => {
-        setRestaurants(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("โหลดข้อมูลไม่สำเร็จ:", err);
-        setLoading(false);
-      });
+    fetchRestaurants();
   }, []);
+
+  const handleRefresh = () => {
+    setLoading(true);
+    fetchRestaurants();
+  };
 
   const filteredRestaurants = restaurants.filter((item) => {
     const matchSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase());
@@ -32,15 +40,17 @@ const Home = () => {
   return (
     <div className="container mx-auto">
       <Navbar />
-      <h1 className="text-3xl text-center m-5">Grab Restaurant</h1>
 
-      <div className="mb-5 flex justify-center">
+      <div className="title justify-center items-center flex flex-col mt-10">
+        <h1 className="text-4xl font-bold mb-4">Grab Restaurant</h1>
+        <button onClick={handleRefresh} className="btn btn-outline btn-sm mt-2">
+          🔄 โหลดใหม่
+        </button>
+      </div>
+
+      <div className="mb-5 flex justify-center mt-8">
         <label className="input flex items-center gap-2 w-96">
-          <svg
-            className="h-[1em] opacity-50"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-          >
+          <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor">
               <circle cx="11" cy="11" r="8"></circle>
               <path d="m21 21-4.3-4.3"></path>
@@ -69,9 +79,11 @@ const Home = () => {
       </div>
 
       {loading ? (
-        <div className="text-center text-gray-400 mt-8">กำลังโหลดข้อมูล...</div>
+        <div className="text-center text-gray-400 mt-8">
+          กำลังโหลดร้านอาหาร... <span className="loading loading-dots loading-lg"></span>
+        </div>
       ) : (
-        <Restaurant restaurants={filteredRestaurants} />
+        <Restaurant restaurants={filteredRestaurants} onRefresh={handleRefresh} />
       )}
     </div>
   );

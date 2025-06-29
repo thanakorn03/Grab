@@ -6,12 +6,12 @@ import AddRestaurant from "./pages/AddRestaurant";
 function App() {
   return (
     <BrowserRouter>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/add-restaurant" element={<AddRestaurant />} />
-      </Routes>
-    </BrowserRouter>
+  <Routes>
+    <Route path="/" element={<Home />} />
+    <Route path="/add-restaurant" element={<AddRestaurant />} />
+    <Route path="/update-restaurant/:id" element={<UpdateRestaurant />} />
+  </Routes>
+</BrowserRouter>
   );
 }
 
